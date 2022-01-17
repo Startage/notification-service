@@ -1,22 +1,33 @@
-import { Injectable } from '@nestjs/common';
-import { RpcException } from '@nestjs/microservices';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectSendGrid, SendGridService } from '@ntegral/nestjs-sendgrid';
 
 @Injectable()
 export class MailerService {
+  private logger = new Logger(MailerService.name);
   public constructor(
     @InjectSendGrid() private readonly sendGridService: SendGridService,
   ) {}
 
-  async signup({
-    name,
-    email,
-    userReference,
+  async send({
+    from,
+    to,
+    subject,
+    bcc,
+    html,
   }: {
-    name: string;
-    email: string;
-    userReference: string;
+    from: string;
+    to: string;
+    subject: string;
+    bcc: string;
+    html: string;
   }) {
-    console.log('erntrou');
+    this.logger.log(`Send email to ${to}`);
+    await this.sendGridService.send({
+      from,
+      to,
+      subject,
+      bcc,
+      html,
+    });
   }
 }

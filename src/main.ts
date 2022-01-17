@@ -1,4 +1,5 @@
 import 'module-alias/register';
+import { RpcRetryExceptionFilter } from '@/common/filters/rpc-retry-exception.filter';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { AppModule } from './app.module';
@@ -30,6 +31,7 @@ async function bootstrap() {
       },
     },
   );
+  app.useGlobalFilters(new RpcRetryExceptionFilter(5));
   await app.listen();
 }
 bootstrap();
