@@ -1,4 +1,4 @@
-import { PrismaService } from '@/prisma.service';
+import { PrismaService } from '@/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { UserEmail } from '@prisma/client';
 
@@ -9,7 +9,7 @@ export class UserEmailService {
   async create(
     data: Omit<UserEmail, 'id' | 'updatedAt' | 'createdAt'>,
   ): Promise<void> {
-    this.prismaService.userEmail.create({
+    await this.prismaService.userEmail.create({
       data,
     });
   }

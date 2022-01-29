@@ -1,6 +1,6 @@
 import { loadTemplate } from '@/common/load-template';
 import { EmailTemplateNameEnum } from '@/email-template/email-template-name.enum';
-import { PrismaService } from '@/prisma.service';
+import { PrismaService } from '@/prisma/prisma.service';
 import { Injectable, Logger } from '@nestjs/common';
 import { EmailTemplate } from '@prisma/client';
 import handlebars from 'handlebars';

@@ -1,4 +1,3 @@
-import { PrismaService } from '@/prisma.service';
 import { UserModule } from '@/user/user.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -22,6 +21,6 @@ import { ResetPasswordModule } from './reset-password/reset-password.module';
     ResetPasswordModule,
   ],
   controllers: [],
-  providers: [PrismaService],
+  providers: [],
 })
 export class AppModule {}

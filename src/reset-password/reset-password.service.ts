@@ -25,40 +25,43 @@ export class ResetPasswordService {
     baseUrlResetPassword: string;
     email: string;
   }) {
+    console.log(email);
     const user = await this.userService.loadByEmail({
       email,
     });
 
-    const { html, emailTemplate } =
-      await this.emailTemplateService.loadAndTranspileByTemplateName({
-        templateName: EmailTemplateNameEnum.authSignup,
-        contextEmail: {
-          name: user.name,
-          baseUrlResetPassword,
-          resetPasswordToken,
-        },
-      });
+    if (user) {
+      const { html, emailTemplate } =
+        await this.emailTemplateService.loadAndTranspileByTemplateName({
+          templateName: EmailTemplateNameEnum.authResetPassword,
+          contextEmail: {
+            name: user.name,
+            baseUrlResetPassword,
+            resetPasswordToken,
+          },
+        });
 
-    await this.mailerService.send({
-      from: emailTemplate.fromEmail,
-      to: user.email,
-      subject: emailTemplate.subjectEmail,
-      bcc: emailTemplate.bccEmail,
-      html,
-    });
-
-    try {
-      await this.userEmailService.create({
-        userId: user.id,
-        emailTemplateId: emailTemplate.id,
-        bccEmail: emailTemplate.bccEmail,
-        fromEmail: emailTemplate.fromEmail,
-        toEmail: user.email,
-        subjectEmail: emailTemplate.subjectEmail,
+      await this.mailerService.send({
+        from: emailTemplate.fromEmail,
+        to: user.email,
+        subject: emailTemplate.subjectEmail,
+        bcc: emailTemplate.bccEmail,
         html,
       });
-    } catch (err) {
-      this.logger.error('Falha ao criar o registro do email', err);
+
+      try {
+        await this.userEmailService.create({
+          userId: user.id,
+          emailTemplateId: emailTemplate.id,
+          bccEmail: emailTemplate.bccEmail,
+          fromEmail: emailTemplate.fromEmail,
+          toEmail: user.email,
+          subjectEmail: emailTemplate.subjectEmail,
+          html,
+        });
+      } catch (err) {
+        this.logger.error('Falha ao criar o registro do email', err);
+      }
     }
   }
 }

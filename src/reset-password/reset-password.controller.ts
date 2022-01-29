@@ -26,11 +26,10 @@ export class ResetPasswordController {
         email,
       })}`,
     );
-    throw new Error('WOWOWOWO');
-    // await this.resetPasswordService.requestResetPassword({
-    //   email,
-    //   resetPasswordToken,
-    //   baseUrlResetPassword,
-    // });
+    await this.resetPasswordService.requestResetPassword({
+      email,
+      resetPasswordToken,
+      baseUrlResetPassword,
+    });
   }
 }
